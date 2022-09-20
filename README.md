@@ -134,44 +134,72 @@ FROM tr_penjualan;
 # DAY THREE
 ## Dalam database, terdapat tabel ms_pelanggan yang berisi data - data pelanggan yang membeli produk dan tabel tr_penjualan yang berisi data transaksi pembelian di suatu store.
 Suatu hari, departemen marketing & promotion meminta bantuan untuk meng-query data-data pelanggan yang membeli produk Kotak Pensil DQLab, Flashdisk DQLab 32 GB, dan Sticky Notes DQLab 500 sheets.
+
 Buatlah query menggunakan tabel ms_pelanggan dan tr_penjualan untuk mendapatkan data - data yang diminta oleh marketing yaitu kode_pelanggan, nama_customer, alamat.
 NB: Gunakan SELECT DISTINCT untuk menghilangkan duplikasi, jika diperlukan.
+
 SELECT DISTINCT ms_pelanggan.kode_pelanggan, ms_pelanggan.nama_customer, ms_pelanggan.alamat
+
 FROM ms_pelanggan
+
 INNER JOIN tr_penjualan
+
 ON ms_pelanggan.kode_pelanggan = tr_penjualan.kode_pelanggan
+
 WHERE tr_penjualan.nama_produk = 'Kotak Pensil DQLab'OR tr_penjualan.nama_produk = 'Flashdisk DQLab 32 GB'OR tr_penjualan.nama_produk = 'Sticky Notes DQLab 500 sheets';
 
 ## Persiapkanlah data katalog mengenai mengenai nama - nama produk yang akan dijual di suatu store. Data tersebut akan digunakan dalam meeting untuk mereview produk mana saja yang akan dilanjutkan penjualannya dan mana yang tidak akan dilanjutkan.
 Siapkan hanya data produk dengan harga di bawah 100K untuk kode produk prod-1 sampai prod-5; dan dibawah 50K untuk kode produk prod-6 sampai prod-10, tanpa mencantumkan kolom no_urut.
+
 Saat mengecek data produk di database, terdapat 2 tabel yang sama - sama berisi data katalog, yaitu:
+
 SELECT nama_produk, kode_produk, harga FROM ms_produk_1 WHERE harga <100000
+
 UNION 
+
 SELECT  nama_produk,kode_produk, harga FROM ms_produk_2 WHERE harga <50000;
 
 ## Contoh penggunaan HAVING
 Untuk penggunaan HAVING pada data yang ada pada bab sebelumnya, kita akan mencari customer_id yang melakukan perpindahan
 subscription pada table subscription. 
 Teman-teman silahkan mengikuti query dibawah ini
+
 SELECT customer_id FROM Subscription GROUP BY customer_id HAVING COUNT(customer_id) > 1;
 Menampilkan Konsumen yang berubah berlangganan
+
 Selanjutnya kita akan menampilkan perubahan yang dilakukan konsumen tersebut.
 Sekarang teman-teman melengkapi query yang ada di code editor dengan menampilkan:
+
 1.	customer_id
+
 2.	product_id
+
 3.	subscription_date
+
 SELECT 
-	customer_id,
-    product_id,
-    subscription_date
+
+customer_id,
+
+product_id,
+
+subscription_date
+
 FROM Subscription 
+
 WHERE customer_id IN 
-	(SELECT 
-    	customer_id 
-     FROM Subscription 
-     GROUP BY customer_id 
-     HAVING COUNT(customer_id) > 1
-  	) 
+
+(SELECT 
+
+customer_id 
+
+FROM Subscription 
+
+GROUP BY customer_id 
+
+HAVING COUNT(customer_id) > 1
+
+) 
+
 ORDER BY customer_id ASC;
 
 ## Menampilkan detail konsumen
@@ -180,20 +208,39 @@ Kita menggunakan JOIN untuk mendapatkan data dari table customer.
 Tugas Praktek
 Isikan bagian yang kosong dengan melakukan JOIN table subscription dan customer dengan menggabungkan
 customer_id dari table subscription dan id dari table customer
-SELECT b.name,
-	   b.address,
-       b.phone, 
-       a.product_id, 
-       a.subscription_date 
+
+SELECT 
+
+b.name,
+
+b.address,
+
+b.phone, 
+
+a.product_id, 
+
+a.subscription_date 
+
 FROM subscription a 
+
 JOIN customer b 
+
 ON a.customer_id=b.id
+
 WHERE b.id IN 
+
 (
-	SELECT 
-    	customer_id 
-        FROM Subscription 
-    GROUP BY customer_id 
-    HAVING COUNT(customer_id) > 1
+
+SELECT 
+
+customer_id 
+
+FROM Subscription 
+
+GROUP BY customer_id 
+
+HAVING COUNT(customer_id) > 1
+
 ) 
+
 ORDER BY b.id ASC;
